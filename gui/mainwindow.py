@@ -63,11 +63,13 @@ class MainWindow(QMainWindow):
         if not manager.exists(current_num, config.FILE_NAME):
             self.alert('알림', '파일이 존재하지 않습니다.')
             return
-        manager.run_code(current_num, config.FILE_NAME)
+        print('입력: ', end='')
+        result = manager.run_code(current_num, config.FILE_NAME)
+        self.alert('결과', result)
 
     def alert(self, title, message):
         msgbox = QMessageBox()
-        msgbox.setIcon(QMessageBox.Icon.Warning)
+        msgbox.setIcon(QMessageBox.Icon.Information)
         msgbox.setWindowTitle(title)
         msgbox.setText(message)
         msgbox.setStandardButtons(QMessageBox.StandardButton.Ok)
