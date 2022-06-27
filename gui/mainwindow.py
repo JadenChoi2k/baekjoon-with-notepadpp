@@ -46,11 +46,10 @@ class MainWindow(QMainWindow):
     def _on_solve_click(self):
         current_num = self.get_current_number()
         if not current_num:
-            QMessageBox(self, '알림', '문제 번호를 입력해주세요')
+            self.alert('알림', '문제 번호를 입력해주세요')
             return
         if manager.exists(current_num, config.FILE_NAME):
-            result = QMessageBox(self, '', '이미 존재하는 파일이 있습니다. 덮어씌웁니까?',
-                                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            result = self.show_dialog('알림', '이미 존재하는 파일이 있습니다. 덮어씌웁니까?')
             if result == QMessageBox.StandardButton.No:
                 return
         manager.save_file(current_num, config.FILE_NAME)
@@ -59,11 +58,28 @@ class MainWindow(QMainWindow):
     def _on_run_click(self):
         current_num = self.get_current_number()
         if not current_num:
-            QMessageBox(self, '알림', '문제 번호를 입력해주세요')
+            self.alert('알림', '문제 번호를 입력해주세요')
             return
         if not manager.exists(current_num, config.FILE_NAME):
-            QMessageBox(self, '알림', '파일이 존재하지 않습니다.')
+            self.alert('알림', '파일이 존재하지 않습니다.')
+            return
         manager.run_code(current_num, config.FILE_NAME)
+
+    def alert(self, title, message):
+        msgbox = QMessageBox()
+        msgbox.setIcon(QMessageBox.Icon.Warning)
+        msgbox.setWindowTitle(title)
+        msgbox.setText(message)
+        msgbox.setStandardButtons(QMessageBox.StandardButton.Ok)
+        msgbox.exec()
+
+    def show_dialog(self, title, message):
+        msgbox = QMessageBox()
+        msgbox.setIcon(QMessageBox.Icon.Information)
+        msgbox.setWindowTitle(title)
+        msgbox.setText(message)
+        msgbox.setStandardButtons(QMessageBox.StandardButton.No | QMessageBox.StandardButton.Yes)
+        return msgbox.exec()
 
 
 def execute():

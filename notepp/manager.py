@@ -6,23 +6,24 @@ def _get_root_path():
     return config.ROOT_PATH
 
 
-def exists(ps_num: int, file_name: str=None) -> bool:
+def exists(ps_num: int, file_name: str = None) -> bool:
     if file_name is None:
         file_name = config.FILE_NAME
     return os.path.isfile(f'{_get_root_path()}\\{ps_num}\\{file_name}')
 
 
 # 파일을 ./[문제 번호]/[파일 이름]으로 저장한다.
-def save_file(ps_num: int, file_name: str=None) -> None:
+def save_file(ps_num: int, file_name: str = None) -> None:
     if file_name is None:
         file_name = config.FILE_NAME
     dir_path = f'{_get_root_path()}\\{ps_num}'
-    os.makedirs(dir_path)
-    open(f'{dir_path}\\{file_name}', 'a').close()
+    if not os.path.isdir(dir_path):
+        os.makedirs(dir_path)
+    open(f'{dir_path}\\{file_name}', 'w').close()
 
 
 # ./[문제 번호]/[파일 이름]에 있는 파일을 노트패드++로 연다.
-def open_as_np(ps_num: int, file_name: str=None) -> None:
+def open_as_np(ps_num: int, file_name: str = None) -> None:
     if file_name is None:
         file_name = config.FILE_NAME
     result = os.system(f'start notepad++ {_get_root_path()}\\{ps_num}\\{file_name}')
@@ -32,9 +33,9 @@ def open_as_np(ps_num: int, file_name: str=None) -> None:
 
 # 코드를 실행하고, 결과를 반환한다.
 def run_code(ps_num: int, file_name: str) -> str:
-    _cmd = config.RUN_CMD\
-        .replace('{root}', _get_root_path())\
-        .replace('{ps_num}', str(ps_num))\
+    _cmd = config.RUN_CMD \
+        .replace('{root}', _get_root_path()) \
+        .replace('{ps_num}', str(ps_num)) \
         .replace('{file_name}', file_name)
     return os.popen(_cmd).read()
 
