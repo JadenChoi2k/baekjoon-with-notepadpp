@@ -1,3 +1,5 @@
+import os
+
 from PyQt6.QtWidgets import *
 from config import config
 from notepp import manager
@@ -48,10 +50,6 @@ class MainWindow(QMainWindow):
         if not current_num:
             self.alert('알림', '문제 번호를 입력해주세요')
             return
-        if manager.exists(current_num, config.FILE_NAME):
-            result = self.show_dialog('알림', '이미 존재하는 파일이 있습니다. 덮어씌웁니까?')
-            if result == QMessageBox.StandardButton.No:
-                return
         manager.save_file(current_num, config.FILE_NAME)
         manager.open_as_np(current_num, config.FILE_NAME)
 
@@ -63,9 +61,11 @@ class MainWindow(QMainWindow):
         if not manager.exists(current_num, config.FILE_NAME):
             self.alert('알림', '파일이 존재하지 않습니다.')
             return
-        print('입력: ', end='')
+        os.system('cls')
+        print('===================== 입력 =====================')
         result = manager.run_code(current_num, config.FILE_NAME)
-        self.alert('결과', result)
+        print('===================== 출력 =====================')
+        print(result)
 
     def alert(self, title, message):
         msgbox = QMessageBox()

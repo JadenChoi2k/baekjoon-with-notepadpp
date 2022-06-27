@@ -19,7 +19,7 @@ def save_file(ps_num: int, file_name: str = None) -> None:
     dir_path = f'{_get_root_path()}\\{ps_num}'
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
-    open(f'{dir_path}\\{file_name}', 'w').close()
+    open(f'{dir_path}\\{file_name}', 'a').close()
 
 
 # ./[문제 번호]/[파일 이름]에 있는 파일을 노트패드++로 연다.
